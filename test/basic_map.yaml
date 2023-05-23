@@ -1,0 +1,10 @@
+firstMap:
+  entry1: this is an entry
+  entry2: this is another entry
+
+
+superNestedMap:
+  entry1:
+    vogelNest: juhu
+    horst: based
+  entry2: "This is a String"
