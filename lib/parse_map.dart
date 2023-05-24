@@ -1,14 +1,3 @@
-/// Returns the [String] used for indentation in [List<String> lines].
-String _determineWhitespace(List<String> lines) {
-  for (var line in lines) {
-    String? match = RegExp(r'^\s+').stringMatch(line);
-    if (match != null) {
-      return match;
-    }
-  }
-  return '  ';
-}
-
 /// Parses a YAML Map from the [List<String> lines] of a file.
 Map<String, dynamic> parseMap(List<String> lines, {int indentLevel = 0}) {
   final String usedWhitespace = _determineWhitespace(lines);
@@ -44,4 +33,34 @@ Map<String, dynamic> parseMap(List<String> lines, {int indentLevel = 0}) {
   }
 
   return map;
+}
+
+/// Returns the [String] used for indentation in [List<String> lines].
+String _determineWhitespace(List<String> lines) {
+  for (var line in lines) {
+    String? match = RegExp(r'^\s+').stringMatch(line);
+    if (match != null) {
+      return match;
+    }
+  }
+  return '  ';
+}
+
+/// Returns the [String value] from a [List<String> keyPath]
+String getPathValue(List<String> keyPath, Map<String, dynamic> map) {
+  dynamic getToNextLvl(String level, Map<String, dynamic> map) => map[level];
+
+  Map<String, dynamic> tempLvlMap = map;
+  String text = '';
+
+  for (var level in keyPath) {
+    dynamic tmp = getToNextLvl(level, tempLvlMap);
+    if (level != keyPath.last) {
+      tempLvlMap = tmp;
+    } else {
+      text = tmp;
+    }
+  }
+
+  return text;
 }
