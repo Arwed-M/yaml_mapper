@@ -1,10 +1,10 @@
 /// Parses a YAML Map from the [List<String> lines] of a file.
-Map<String, dynamic> parseMap(List<String> lines, {int indentLevel = 0}) {
-  final String usedWhitespace = _determineWhitespace(lines);
+Map<String, dynamic> parseMap(List<String> lines, String indentMarker,
+    {int indentLevel = 0}) {
   Map<String, dynamic> map = {};
 
   for (int i = 0; i < lines.length; i++) {
-    String whitespace = usedWhitespace * (indentLevel + 1);
+    String whitespace = indentMarker * (indentLevel + 1);
     List<String> lineSplit = lines[i].split(':');
     String key = lineSplit.first.trim();
 
@@ -19,24 +19,30 @@ Map<String, dynamic> parseMap(List<String> lines, {int indentLevel = 0}) {
         mapEndIndex++;
       }
 
-      map[key] = parseMap(lines.sublist(mapStartIndex, mapEndIndex),
+      map[key] = parseMap(
+          lines.sublist(mapStartIndex, mapEndIndex), indentMarker,
           indentLevel: indentLevel + 1);
       i += (mapEndIndex - mapStartIndex);
     }
     // no further indentation
     else if (lines[i].trim().isNotEmpty) {
-      map[key] = lines[i]
-          .replaceFirst('${lineSplit.first}:', '')
-          .replaceAll('"', '')
-          .trim();
+      map[key] = _replaceQuotation(lineSplit[1].trim());
     }
   }
 
   return map;
 }
 
+String _replaceQuotation(String text) {
+  if (text.indexOf('"') == 0) text = text.replaceFirst('"', '');
+  if (text.lastIndexOf('"') == text.length - 1) {
+    text = text.replaceRange(text.length - 1, text.length, '');
+  }
+  return text;
+}
+
 /// Returns the [String] used for indentation in [List<String> lines].
-String _determineWhitespace(List<String> lines) {
+String determineWhitespace(List<String> lines) {
   for (var line in lines) {
     String? match = RegExp(r'^\s+').stringMatch(line);
     if (match != null) {

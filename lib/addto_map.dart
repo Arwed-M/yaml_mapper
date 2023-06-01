@@ -25,9 +25,13 @@ String _createYAMLLines(Map<String, dynamic> map, {int indentation = 0}) {
       case 'String':
         lines += '${'  ' * indentation + key}: "${map[key].trim()}"\n';
         break;
+
       case '_Map<String, dynamic>':
         lines +=
             '${'  ' * indentation}$key: \n${_createYAMLLines(map[key], indentation: indentation + 1)}\n';
+        break;
+      case 'Null':
+        lines += '${'  ' * indentation + key}: \n';
         break;
       default:
     }
