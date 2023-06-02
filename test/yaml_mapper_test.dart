@@ -12,7 +12,8 @@ void main() {
     expect(yaml['firstMap']['entry1'], 'this is an entry');
     expect(yaml['superNestedMap']['entry1']['vogelNest'], 'juhu');
     expect(yaml['superNestedMap']['entry2'], 'This is a String');
-    expect(yaml['superNestedMap']['entry3']['evenMoreNested'],
+    expect(yaml['superNestedMap']['entry3'], 'This is also a String');
+    expect(yaml['superNestedMap']['entry4']['evenMoreNested'],
         'hmm yery nested indeed');
   });
 }

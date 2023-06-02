@@ -34,10 +34,12 @@ Map<String, dynamic> parseMap(List<String> lines, String indentMarker,
 }
 
 String _replaceQuotation(String text) {
-  if (text.indexOf('"') == 0) text = text.replaceFirst('"', '');
-  if (text.lastIndexOf('"') == text.length - 1) {
-    text = text.replaceRange(text.length - 1, text.length, '');
-  }
+  ['"', "'"].map((mark) {
+    if (text.indexOf(mark) == 0) text = text.replaceFirst(mark, '');
+    if (text.lastIndexOf(mark) == text.length - 1) {
+      text = text.replaceRange(text.length - 1, text.length, '');
+    }
+  }).toList();
   return text;
 }
 

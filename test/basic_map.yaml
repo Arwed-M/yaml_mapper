@@ -8,5 +8,6 @@ superNestedMap:
     vogelNest: juhu
     horst: based
   entry2: "This is a String"
-  entry3:
+  entry3: 'This is also a String'
+  entry4:
     evenMoreNested: hmm yery nested indeed
