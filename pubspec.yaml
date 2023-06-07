@@ -1,6 +1,6 @@
 name: yaml_mapper
 description: A simple YAML-Map parser for YAML-Map to Dart Map<String, dynamic> conversion.
-version: 0.0.3
+version: 0.0.4
 homepage: https://github.com/Arwed-M/yaml_mapper
 
 environment:

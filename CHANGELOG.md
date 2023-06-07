@@ -13,3 +13,7 @@ Provide basic parsing utilities.
 - add list parsing
 - provide 'remove key from path' method
 - bug fixes
+
+## 0.0.4
+
+- fix faulty 'removeFromMap' method
