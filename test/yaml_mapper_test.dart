@@ -23,12 +23,15 @@ void main() {
 
   test('Removal test', () {
     Map<String, dynamic> map = {
-      'entry1': {'nested1': 'val1', 'nested2': 'val2'},
+      'entry1': {
+        'nested1': 'val1',
+        'nested2': {'nested': 'test'}
+      },
       'entry2': 'val'
     };
 
     removeFromMap(map, ['entry1', 'nested1']);
-    removeFromMap(map, ['entry1', 'nested2']);
+    removeFromMap(map, ['entry1', 'nested2', 'nested']);
     expect(map, {'entry2': 'val'});
   });
 }
