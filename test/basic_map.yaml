@@ -10,4 +10,8 @@ superNestedMap:
   entry2: "This is a String"
   entry3: 'This is also a String'
   entry4:
-    evenMoreNested: hmm yery nested indeed
+    evenMoreNested: hmm very nested indeed
+  entry5:
+    - 'I am a: list entry'
+    - hey, this is also a l:st
+    - 'Am I a List ": entry"'
