@@ -7,3 +7,9 @@ Provide basic parsing utilities.
 - fix the indentmarker recognition
 - add null value detection
 - provide a simple example
+
+## 0.0.3
+
+- add list parsing
+- provide 'remove key from path' method
+- bug fixes
