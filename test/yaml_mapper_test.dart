@@ -5,9 +5,10 @@ import 'package:yaml_mapper/yaml_mapper.dart';
 
 void main() {
   final List<String> lines = File('test/basic_map.yaml').readAsLinesSync();
-  final yaml = parseMap(lines, '  ');
 
   test('Parsing test', () {
+    final yaml = parseMap(lines, determineWhitespace(lines));
+
     expect(yaml['firstMap']['entry1'], 'this is an entry');
     expect(yaml['superNestedMap']['entry1']['vogelNest'], 'juhu');
     expect(yaml['superNestedMap']['entry2'], 'This is a String');

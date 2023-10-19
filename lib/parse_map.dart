@@ -1,3 +1,5 @@
+import 'package:yaml_mapper/extentions.dart';
+
 /// Parses a YAML Map from the [List<String> lines] of a file.
 Map<String, dynamic> parseMap(List<String> lines, String indentMarker,
     {int indentLevel = 0}) {
@@ -22,7 +24,7 @@ Map<String, dynamic> parseMap(List<String> lines, String indentMarker,
       }
 
       // get YAML List or recursion
-      map[key] = _isList(lines[i + 1])
+      map[key] = lines[i + 1].isYamlList
           ? _createList(lines.sublist(mapStartIndex, mapEndIndex))
           : parseMap(lines.sublist(mapStartIndex, mapEndIndex), indentMarker,
               indentLevel: indentLevel + 1);
@@ -30,20 +32,13 @@ Map<String, dynamic> parseMap(List<String> lines, String indentMarker,
     }
     // no further indentation
     else if (line.isNotEmpty) {
-      map[key] = _replaceQuotation(
-          line.replaceFirst('${lineSplit.first}:', '').trim());
+      final String value = line.replaceFirst('${lineSplit.first}:', '').trim();
+      map[key] = value.isNull ? null : _replaceQuotation(value);
     }
   }
 
   return map;
 }
-
-bool _isList(String line) => (line.trim().substring(0, 2) == '- ' &&
-    (!line.contains(': ') || _escapedColon(line)));
-
-/// check wether an occuring colon is inside quotations
-bool _escapedColon(String line) =>
-    RegExp(r"""[^('|")].*:""").firstMatch(line)?.start != null;
 
 List<dynamic> _createList(List<String> lines) {
   return lines
@@ -53,19 +48,12 @@ List<dynamic> _createList(List<String> lines) {
 
 /// Replaces quotation marks at the beginning/end of value
 dynamic _replaceQuotation(String text) {
-  // handle empty String
-  if (text == '""' || text == "''") {
-    return '';
-  } else if (text.isEmpty) {
-    return null;
-  }
-
-  ['"', "'"].map((mark) {
+  for (var mark in ['"', "'"]) {
     if (text.indexOf(mark) == 0) text = text.replaceFirst(mark, '');
-    if (text.lastIndexOf(mark) == text.length - 1) {
+    if (text.endsWith(mark)) {
       text = text.substring(0, text.length - 1);
     }
-  }).toList();
+  }
   return text;
 }
 
