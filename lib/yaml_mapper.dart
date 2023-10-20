@@ -1,5 +1,5 @@
 library yaml_mapper;
 
-export 'parse_map.dart';
+export 'parser.dart';
 export 'addto_map.dart';
-export 'removefrom_map.dart';
+export 'remove_from_map.dart';

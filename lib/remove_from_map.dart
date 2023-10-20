@@ -1,13 +1,13 @@
-import 'package:yaml_mapper/yaml_mapper.dart';
+import 'node_type.dart';
 
-/// Removes a key from a map with the depth definded by [List<String> keyPath]
+/// Removes a key from a map with the depth definded by [KeyPath]
 /// and cleans up afterwards
-void removeFromMap(Map<String, dynamic> map, List<String> keyPath) {
+void removeFromMap(YamlMap map, KeyPath keyPath) {
   _deleteKey(map, [...keyPath]);
   _removeEmptyness(map, keyPath.sublist(0, keyPath.length - 1));
 }
 
-void _deleteKey(Map<String, dynamic> map, List<String> keyPath) {
+void _deleteKey(YamlMap map, KeyPath keyPath) {
   // not valid
   if (keyPath.isEmpty) return;
 
@@ -25,10 +25,27 @@ void _deleteKey(Map<String, dynamic> map, List<String> keyPath) {
   }
 }
 
+/// Returns the [String] from a [KeyPath]
+dynamic getPathValue(KeyPath keyPath, YamlMap map) {
+  YamlMap tempLvlMap = map;
+  dynamic value = '';
+
+  for (var level in keyPath) {
+    dynamic tmp = tempLvlMap[level];
+    if (level != keyPath.last) {
+      tempLvlMap = tmp;
+    } else {
+      value = tmp;
+    }
+  }
+
+  return value;
+}
+
 /// Removes empty keys which might remain after removal of single keys
-void _removeEmptyness(Map<String, dynamic> map, List<String> keyPath) {
+void _removeEmptyness(YamlMap map, KeyPath keyPath) {
   for (int i = keyPath.length; i > 0; i--) {
-    List<String> path = keyPath.sublist(0, i);
+    KeyPath path = keyPath.sublist(0, i);
     if (getPathValue(path, map).isEmpty) _deleteKey(map, path);
   }
 }

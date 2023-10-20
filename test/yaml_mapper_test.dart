@@ -18,7 +18,10 @@ void main() {
     expect(yaml['superNestedMap']['entry5'], [
       'I am a: list entry',
       'hey, this is also a l:st',
-      'Am I a List ": entry"'
+      'Am I a List ": entry"',
+      {
+        'nestedList': ['hey I am nested inside a List', 'me too']
+      }
     ]);
   });
 
