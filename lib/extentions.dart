@@ -7,4 +7,14 @@ extension StringYamlUtils on String {
       RegExp(r"""[^('|")].*:""").firstMatch(this)?.start != null;
 
   bool get isNull => isEmpty;
+
+  /// Replaces quotation marks at the beginning/end of value
+  String get replaceQuotation {
+    String str = this;
+    for (var mark in ['"', "'"]) {
+      if (str.startsWith(mark)) str = str.replaceFirst(mark, '');
+      if (str.endsWith(mark)) str = str.substring(0, str.length - 1);
+    }
+    return str;
+  }
 }
