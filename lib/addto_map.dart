@@ -3,7 +3,6 @@ import 'node_type.dart';
 
 /// adds a dynamic value to [YamlMap] with the depth definded by [KeyPath]
 YamlMap addValToMap(YamlMap map, List<String> keyPath, dynamic value) =>
-    // uwu
     YamlMap.from({
       ...map,
       keyPath.first: keyPath.length == 1
@@ -16,18 +15,15 @@ String toYaml(YamlMap map, {int indentation = 0}) {
   String lines = '';
 
   for (var key in map.keys) {
-    switch (NodeType.fromObj(map[key])) {
-      case NodeType.string:
-        lines += YamlStringer.keyVal(key, map[key], indentation);
-        break;
-      case NodeType.map:
-        lines += YamlStringer.map(
-            key, toYaml(map[key], indentation: indentation + 1), indentation);
-        break;
-      case NodeType.empty:
-        lines += YamlStringer.empty(key, indentation);
-        break;
-      default:
+    if (map[key] is Map) {
+      lines += YamlStringer.map(
+          key, toYaml(map[key], indentation: indentation + 1), indentation);
+    } else if (map[key] is List) {
+      lines += YamlStringer.list(key, map[key], indentation);
+    } else if (map[key] is String) {
+      lines += YamlStringer.keyVal(key, map[key], indentation);
+    } else {
+      lines += YamlStringer.empty(key, indentation);
     }
   }
 

@@ -1,6 +1,7 @@
 import 'dart:io';
 
-import 'package:flutter_test/flutter_test.dart';
+import 'package:test/test.dart';
+import 'package:yaml_mapper/node_type.dart';
 import 'package:yaml_mapper/yaml_mapper.dart';
 
 void main() {
@@ -25,17 +26,38 @@ void main() {
     ]);
   });
 
-  test('Removal test', () {
-    Map<String, dynamic> map = {
+  test('Adding and removal test', () {
+    YamlMap map = {
       'entry1': {
         'nested1': 'val1',
-        'nested2': {'nested': 'test'}
       },
       'entry2': 'val'
     };
 
+    map = addValToMap(map, ['entry1', 'nested2'], {'nested': 'test'});
+    map = addValToMap(map, ['entry1', 'nested3'], 3);
+
     removeFromMap(map, ['entry1', 'nested1']);
     removeFromMap(map, ['entry1', 'nested2', 'nested']);
+    removeFromMap(map, ['entry1', 'nested3']);
     expect(map, {'entry2': 'val'});
+  });
+
+  test('toYaml conversion test', () {
+    YamlMap map = {
+      'e1': 'haha',
+      'e2': {'e21': 'v21', 'e22': 'v22'},
+      'e3': 'hallo'
+    };
+
+    String expectedRes = """
+e1: "haha"
+e2: 
+  e21: "v21"
+  e22: "v22"
+
+e3: "hallo"
+""";
+    expect(toYaml(map), expectedRes);
   });
 }

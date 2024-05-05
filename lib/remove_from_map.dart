@@ -2,33 +2,34 @@ import 'node_type.dart';
 
 /// Removes a key from a map with the depth definded by [KeyPath]
 /// and cleans up afterwards
-void removeFromMap(YamlMap map, KeyPath keyPath) {
-  _deleteKey(map, [...keyPath]);
-  _removeEmptyness(map, keyPath.sublist(0, keyPath.length - 1));
+dynamic removeFromMap(YamlMap map, KeyPath keyPath) {
+  KeyPath pathCpy = KeyPath.from(keyPath);
+  final val = _deleteKey(map, keyPath);
+  _cleanUp(map, pathCpy.sublist(0, pathCpy.length - 1));
+  return val;
 }
 
-void _deleteKey(YamlMap map, KeyPath keyPath) {
+dynamic _deleteKey(YamlMap map, KeyPath keyPath) {
   // not valid
-  if (keyPath.isEmpty) return;
+  if (keyPath.isEmpty) return null;
 
   // toplevel key
   if (keyPath.length == 1) {
-    map.remove(keyPath.last);
-    return;
+    return map.remove(keyPath.last);
   }
 
-  // nested keys
-  if (keyPath.length == 2) {
-    map[keyPath[keyPath.length - 2]].remove(keyPath.last);
-  } else {
-    _deleteKey(map[keyPath.removeAt(0)], keyPath);
+  Object val = map[keyPath.removeAt(0)];
+  if (val is YamlMap) {
+    return _deleteKey(val, keyPath);
+  } else if (val is List) {
+    return val.remove(keyPath.last);
   }
 }
 
-/// Returns the [String] from a [KeyPath]
+/// Returns the value from a [KeyPath]
 dynamic getPathValue(KeyPath keyPath, YamlMap map) {
   YamlMap tempLvlMap = map;
-  dynamic value = '';
+  dynamic value = tempLvlMap;
 
   for (var level in keyPath) {
     dynamic tmp = tempLvlMap[level];
@@ -43,7 +44,7 @@ dynamic getPathValue(KeyPath keyPath, YamlMap map) {
 }
 
 /// Removes empty keys which might remain after removal of single keys
-void _removeEmptyness(YamlMap map, KeyPath keyPath) {
+void _cleanUp(YamlMap map, KeyPath keyPath) {
   for (int i = keyPath.length; i > 0; i--) {
     KeyPath path = keyPath.sublist(0, i);
     if (getPathValue(path, map).isEmpty) _deleteKey(map, path);
