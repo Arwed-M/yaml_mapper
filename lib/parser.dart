@@ -1,5 +1,6 @@
+import 'package:yaml_mapper/types.dart';
+
 import 'extentions.dart';
-import 'node_type.dart';
 
 /// Parses a [YamlMap] from the [lines] of a file.
 /// [indentMarker] specifies the used [String] for indentation

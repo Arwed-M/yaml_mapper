@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:test/test.dart';
-import 'package:yaml_mapper/node_type.dart';
+import 'package:yaml_mapper/types.dart';
 import 'package:yaml_mapper/yaml_mapper.dart';
 
 void main() {
@@ -36,11 +36,13 @@ void main() {
 
     map = addValToMap(map, ['entry1', 'nested2'], {'nested': 'test'});
     map = addValToMap(map, ['entry1', 'nested3'], 3);
+    map = addValToMap(map, ['entry3', 'nested'], 42);
 
-    removeFromMap(map, ['entry1', 'nested1']);
-    removeFromMap(map, ['entry1', 'nested2', 'nested']);
-    removeFromMap(map, ['entry1', 'nested3']);
-    expect(map, {'entry2': 'val'});
+    removeFromMap(map, ['entry1', 'nested1'], cleanup: true);
+    removeFromMap(map, ['entry1', 'nested2', 'nested'], cleanup: true);
+    removeFromMap(map, ['entry1', 'nested3'], cleanup: true);
+    removeFromMap(map, ['entry3', 'nested']);
+    expect(map, {'entry2': 'val', 'entry3': {}});
   });
 
   test('toYaml conversion test', () {

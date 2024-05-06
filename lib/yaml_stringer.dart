@@ -2,8 +2,13 @@
 class YamlStringer {
   static String indent(int i) => '  ' * i;
 
-  static String keyVal(String key, String val, int i) =>
+  static String strKey(String key, String val, int i) =>
       '${indent(i) + key}: "${val.trim()}"\n';
+
+  static String numKey(String key, num val, int i) =>
+      '${indent(i) + key}: $val\n';
+
+  static String nullKey(String key, int i) => '${indent(i) + key}: null\n';
 
   static String map(String key, String val, int i) =>
       '${indent(i)}$key: \n$val\n';

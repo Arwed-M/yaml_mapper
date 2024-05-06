@@ -1,11 +1,12 @@
-import 'node_type.dart';
+import 'package:yaml_mapper/addto_map.dart';
+import 'package:yaml_mapper/types.dart';
 
 /// Removes a key from a map with the depth definded by [KeyPath]
 /// and cleans up afterwards
-dynamic removeFromMap(YamlMap map, KeyPath keyPath) {
+dynamic removeFromMap(YamlMap map, KeyPath keyPath, {bool cleanup = false}) {
   KeyPath pathCpy = KeyPath.from(keyPath);
   final val = _deleteKey(map, keyPath);
-  _cleanUp(map, pathCpy.sublist(0, pathCpy.length - 1));
+  _cleanUp(map, pathCpy.sublist(0, pathCpy.length - 1), cleanup);
   return val;
 }
 
@@ -44,9 +45,11 @@ dynamic getPathValue(KeyPath keyPath, YamlMap map) {
 }
 
 /// Removes empty keys which might remain after removal of single keys
-void _cleanUp(YamlMap map, KeyPath keyPath) {
+void _cleanUp(YamlMap map, KeyPath keyPath, bool removeEmptyVals) {
   for (int i = keyPath.length; i > 0; i--) {
     KeyPath path = keyPath.sublist(0, i);
-    if (getPathValue(path, map).isEmpty) _deleteKey(map, path);
+    if (removeEmptyVals && getPathValue(path, map).isEmpty) {
+      _deleteKey(map, path);
+    }
   }
 }
