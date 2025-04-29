@@ -1,14 +1,17 @@
 import 'package:yaml_mapper/types.dart';
 import 'package:yaml_mapper/yaml_stringer.dart';
 
-/// adds a dynamic value to [YamlMap] with the depth definded by [KeyPath]
-YamlMap addValToMap(YamlMap map, List<String> keyPath, dynamic value) =>
-    YamlMap.from({
-      ...map,
-      keyPath.first: keyPath.length == 1
-          ? value
-          : addValToMap(map[keyPath.removeAt(0)] ?? {}, keyPath, value)
-    });
+/// Adds a dynamic value to [YamlMap] with the depth definded by [KeyPath]
+/// and returns the new [YamlMap]
+YamlMap addValToMap(YamlMap map, List<String> keyPath, dynamic value) {
+  var keyPathCpy = KeyPath.from(keyPath);
+  return YamlMap.from({
+    ...map,
+    keyPathCpy.first: keyPathCpy.length == 1
+        ? value
+        : addValToMap(map[keyPathCpy.removeAt(0)] ?? {}, keyPathCpy, value)
+  });
+}
 
 /// Converts a [Map<String, dynamic>] to the YAML syntax
 String toYaml(YamlMap map, {int indentation = 0}) {

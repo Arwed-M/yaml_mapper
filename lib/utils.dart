@@ -1,20 +1,3 @@
-List<dynamic> parseList(List<String> lines, String indentMarker,
-    {int indentLevel = 0}) {
-  final String indention = indentMarker * (indentLevel + 1);
-  List<dynamic> list = [];
-
-  for (int i = 0; i < lines.length; i++) {
-    if (lines[i].trim().isEmpty) continue;
-    if (i < lines.length - 1 && lines[i + 1].startsWith(indention)) {
-      // TODO
-      // implement same logic as in parse Map
-    } else {
-      list.add(replaceQuotation(lines[i].trim().replaceFirst('- ', '')));
-    }
-  }
-  return list;
-}
-
 /// Replaces quotation marks at the beginning/end of value
 dynamic replaceQuotation(String text) {
   for (var mark in ['"', "'"]) {

@@ -25,7 +25,8 @@ YamlMap parseMap(List<String> lines, String indentMarker,
     // no further indentation
     else {
       final String value = line.replaceFirst('$key:', '').trim();
-      map[key] = value.isEmpty ? null : value.replaceQuotation;
+      map[key] =
+          value.isEmpty || value == 'null' ? null : value.replaceQuotation;
     }
   }
 

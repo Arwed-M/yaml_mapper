@@ -18,3 +18,23 @@ extension StringYamlUtils on String {
     return str;
   }
 }
+
+extension MapUtils on Map<String, dynamic> {
+  Map<String, dynamic> flattenMap() {
+    Map<String, dynamic> result = {};
+
+    void flatten(String prefix, Map<String, dynamic> innerMap) {
+      innerMap.forEach((key, value) {
+        String newKey = prefix.isEmpty ? key : '$prefix.$key';
+        if (value is Map) {
+          flatten(newKey, value as Map<String, dynamic>);
+        } else {
+          result[newKey] = value;
+        }
+      });
+    }
+
+    flatten('', this);
+    return result;
+  }
+}

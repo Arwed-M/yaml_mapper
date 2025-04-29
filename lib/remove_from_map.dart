@@ -1,8 +1,7 @@
-import 'package:yaml_mapper/addto_map.dart';
 import 'package:yaml_mapper/types.dart';
 
 /// Removes a key from a map with the depth definded by [KeyPath]
-/// and cleans up afterwards
+/// and returns the removed value
 dynamic removeFromMap(YamlMap map, KeyPath keyPath, {bool cleanup = false}) {
   KeyPath pathCpy = KeyPath.from(keyPath);
   final val = _deleteKey(map, keyPath);
@@ -29,11 +28,11 @@ dynamic _deleteKey(YamlMap map, KeyPath keyPath) {
 
 /// Returns the value from a [KeyPath]
 dynamic getPathValue(KeyPath keyPath, YamlMap map) {
-  YamlMap tempLvlMap = map;
+  YamlMap? tempLvlMap = map;
   dynamic value = tempLvlMap;
 
   for (var level in keyPath) {
-    dynamic tmp = tempLvlMap[level];
+    dynamic tmp = tempLvlMap?[level];
     if (level != keyPath.last) {
       tempLvlMap = tmp;
     } else {
